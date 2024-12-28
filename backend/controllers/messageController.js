@@ -37,3 +37,16 @@ export const sendMessage= async(req,res)=>{
         console.log(error);
     }
 }
+
+export const getMessage=async(req,res)=>{
+    try{
+        const receiverId=req.params.id;
+        const senderId=req.id;
+        const conversation=await Conversation.findOne({
+            participants:{$all:[senderId, receiverId]}
+        }).populate("messages");
+        console.log(conversation);
+    }catch(error){
+        console.log(error);
+    }
+}
