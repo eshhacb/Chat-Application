@@ -29,6 +29,8 @@ const router=createBrowserRouter([
   useEffect(()=>{
     if(authUser){
       const socket=io('http://localhost:8080',{
+        path:'/socket',
+        reconnection:'true',
         transports: ['websocket'],
       });
     
