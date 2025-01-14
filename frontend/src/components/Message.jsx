@@ -18,7 +18,7 @@ const Message = ({message}) => {
                     src={message?.senderId === authUser?._id ? authUser?.profilePhoto  : selectedUser?.profilePhoto} />
     </div>
   </div>
-  <div className="chat-bubble bg-gray-700 text-white p-3 rounded-lg relative">
+  <div className="chat-bubble bg-gray-300 text-black p-3 rounded-lg relative">
   <span className=''>{message?.message}</span>
   <time className="text-xs opacity-50 self-end ml-2">12:45</time>
       </div>
