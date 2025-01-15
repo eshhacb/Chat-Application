@@ -1,4 +1,4 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
+import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import userReducer from "./userSlice.js";
 import messageReducer from "./messageSlice.js";
 import socketReducer from "./socketSlice.js";
@@ -10,7 +10,8 @@ import {
     PERSIST,
     PURGE,
     REGISTER,
-  } from 'redux-persist'
+    persistStore,
+  } from 'redux-persist';
   import storage from 'redux-persist/lib/storage'
 
   const persistConfig = {
@@ -19,23 +20,26 @@ import {
     storage,
   }
 
-  const rootReducer= combineReducers({
+  const rootReducer = combineReducers({
     user:userReducer,
     message:messageReducer,
-    socket:socketReducer 
-  })
+    socket:socketReducer
+ })
 
-  const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 
-const store=configureStore({
-    reducer:  persistedReducer,
+const store = configureStore({
+    reducer:persistedReducer,
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-          serializableCheck: {
-            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-          },
-        }),
-    
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredPaths: ["socket.socket"],
+      },
+    }),
 });
+
+
+export const persistor = persistStore(store);
 export default store;

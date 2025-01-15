@@ -8,11 +8,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import io from "socket.io-client"
 import { setSocket } from './redux/socketSlice.js'
 import { setOnlineUsers } from './redux/userSlice.js'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 const router=createBrowserRouter([
   {
     path:"/",
-    element:<HomePage/>
+    element:<Login/>
   },
   {
     path:"/signup",
@@ -21,6 +22,10 @@ const router=createBrowserRouter([
   {
     path:"/login",
     element:<Login/>
+  },
+  {
+    path:"/home",
+    element:<ProtectedRoute><HomePage/></ProtectedRoute>
   }
 ])
 
@@ -43,7 +48,10 @@ const router=createBrowserRouter([
       socket.on('getOnlineUsers',(onlineUsers)=>{
           dispatch(setOnlineUsers(onlineUsers))
       });
-      return ()=>socket.close();
+      return ()=>{
+        socket.close();
+        dispatch(setSocket(null));
+      }
     }else{
       if(socket){
         socket.close();

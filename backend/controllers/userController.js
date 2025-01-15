@@ -89,14 +89,23 @@ export const login= async(req,res)=>{
 }
 
 export const logout=(req,res)=>{
-    try{
-        return res.status(200).cookie("token","",{maxAge:0}).json({
-            message:"logged out successfully!"
-        })
-    }catch (error){
-        console.log(error);
-        return res.status(500).json({ message: "An internal server error occurred." });
-    }
+        try {
+            // Set headers to prevent caching on the client-side
+            res.setHeader('Cache-Control', 'no-store'); // Prevent caching of sensitive data
+            res.setHeader('Pragma', 'no-cache'); // For older HTTP/1.0 caches
+            res.setHeader('Expires', '0'); // Set expiry time to 0 for older browsers
+        
+            // Clear the "token" cookie
+            return res
+              .status(200)
+              .cookie("token", "", { maxAge: 0, httpOnly: true, secure: true })
+              .json({
+                message: "Logged out successfully!",
+              });
+          } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: "An internal server error occurred." });
+          }
 }
 
 export const getOtherUsers=async(req,res)=>{
