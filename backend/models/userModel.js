@@ -1,9 +1,22 @@
 import mongoose from "mongoose";
+import validator from 'validator';
+
 
 const userModel= new mongoose.Schema({
     fullName:{
         type: String,
         required:true,
+    },
+    email:{
+        type:String,
+        required:true,
+        unique:true,
+        validate:{
+            validator:function(v){
+                return validator.isEmail(v);
+            },
+            message: props=> `${props.value} is not a valid email!`,
+        },
     },
     username:{
         type:String,
@@ -23,6 +36,6 @@ const userModel= new mongoose.Schema({
         enum:["male","female"], //either of these values
         required:true,
     }
-},{timestamp:true})
+},{timestamps:true})
 
 export const User=mongoose.model("User",userModel);

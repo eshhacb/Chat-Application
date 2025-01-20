@@ -2,20 +2,39 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import validator from 'validator'; 
+import { FaRegCircleCheck } from "react-icons/fa6";
+
 
 const Signup = () => {
   const [user, setUser]=useState({
     fullName:"",
+    email:"",
     username:"",
     password:"",
     confirmPassword:"",
     gender:"male",
   });
+  
+  const [isEmailValid, setIsEmailValid] = useState(false);
   const navigate=useNavigate();
+
+  //handling checkbox
 
   const handleCheckbox= (gender)=>{
     setUser({...user,gender})
   }
+
+  //validating email
+  const validateEmail = (email) => {
+    if (validator.isEmail(email)) {
+      setIsEmailValid(true);
+    } else {
+      setIsEmailValid(false);
+    }
+  };
+
+  //submit handler
 
   const onSubmitHandler=async (e)=>{
      e.preventDefault();
@@ -37,12 +56,14 @@ const Signup = () => {
      }
       setUser({
         fullName:"",
+        email:"",
         username:"",
         password:"",
         confirmPassword:"",
         gender:"male",
-      })
-  }
+      });
+      setIsEmailValid(false); // Reset validation status
+  } 
   return (
     <div className="min-w-96 mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100">
@@ -57,6 +78,26 @@ const Signup = () => {
           onChange={(e)=>setUser({...user,fullName:e.target.value})}
           className='w-full input input-bordered h-10' type="text" placeholder="Full Name" />
         </div>
+        
+       {/* //adding the email  */}
+        <div className="relative">
+          <label className="label p-2">
+            <span className='text-base label-text '>Email Address</span>
+          </label>
+          <input 
+          value={user.email}
+          onChange={(e) => {
+            setUser({ ...user, email: e.target.value });
+            validateEmail(e.target.value); // Validate email on change
+          }}
+          className={`w-full input input-bordered h-10 ${
+            isEmailValid ? "border-green-500" : "border-red-500"
+        }`}
+          type="email"
+          placeholder="Email-Id"
+        />
+        </div>
+
         <div>
           <label className="label p-2">
             <span className='text-base label-text '>Username</span>

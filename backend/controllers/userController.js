@@ -6,14 +6,19 @@ import jwt from "jsonwebtoken"
 
 export const register=async(req,res)=>{
     try{
-        const {fullName, username, password, confirmPassword, gender} = req.body;
+        const {fullName, email, username, password, confirmPassword, gender} = req.body;
         //submitted when user submits the form
 
-        if(!fullName || !username || !password || !confirmPassword || !gender){
+        if(!fullName || !email || !username || !password || !confirmPassword || !gender){
             return res.status(400).json({message:"All fields are required"});
         }
         if(password !== confirmPassword){
             return res.status(400).json({message:"password do not match"});
+        }
+
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
+            return res.status(400).json({ message: "Email already in use, please use another one!" });
         }
 
         const user=await User.findOne({username});
@@ -32,6 +37,7 @@ export const register=async(req,res)=>{
         //inserts a new document into the users collection in the db with specified fields
         await User.create({
             fullName,
+            email,
             username,
             password: hashedPassword,
             profilePhoto: gender==="male"?maleProfilePhoto:femaleProfilePhoto,

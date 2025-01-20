@@ -29,10 +29,10 @@ const router=createBrowserRouter([
   }
 ])
 
- function App() {
-  const {authUser}=useSelector(store=>store.user);
+function App() {
+  const { authUser } = useSelector(store => store.user);
   const {socket}=useSelector(store=>store.socket);
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(()=>{
     if(authUser){
@@ -60,11 +60,12 @@ const router=createBrowserRouter([
     }
   },[authUser])
 
+
   return (
     <>
-        <div className="p-4 h-screen flex items-center justify-center">
-          <RouterProvider router={router}/>
-        </div>
+      <div className="p-4 h-screen flex items-center justify-center">
+        <RouterProvider router={router}/>
+      </div>
     </>
   );
 }
