@@ -1,8 +1,10 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import { sendOTP, isOTPExpired, otpStore } from "./otpController.js";
 
 //handling the registration of a new user
+let registrationDataStore = {};
 
 export const register=async(req,res)=>{
     try{
@@ -26,32 +28,89 @@ export const register=async(req,res)=>{
             return res.status(400).json({message:"Username already exists, try another username!"})
         }
 
-        //password hashing
-        const hashedPassword= await bcrypt.hash(password,10);
-
-        //profile photo
-        const maleProfilePhoto= `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const femaleProfilePhoto=`https://avatar.iran.liara.run/public/girl?username=${username}`;
-        
-
-        //inserts a new document into the users collection in the db with specified fields
-        await User.create({
+          // Save user data temporarily
+        registrationDataStore[email] = {
             fullName,
             email,
             username,
-            password: hashedPassword,
-            profilePhoto: gender==="male"?maleProfilePhoto:femaleProfilePhoto,
+            password,
             gender,
-        });
-        return res.status(201).json({
-            message:"Account created successfully!", success:true
-        });
-    }catch(error){
-        console.log(error);
-        return res.status(500).json({ message: "Server error. Please try again." });
+        };
+  
+      // Send OTP to the user's email
+      sendOTP(email);
+  
+      return res.status(200).json({
+        message: "OTP has been sent to your email. Please verify to complete registration.",
+        success: true,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Server error. Please try again." });
     }
 };
 
+// Step 2: Verify OTP and Complete Registration
+export const verify = async (req, res) => {
+    try {
+      const {otp } = req.body;
+  
+      if (!otp) {
+        return res.status(400).json({ message: "OTP is required" });
+      }
+
+
+    // Find the email associated with the OTP
+    const email = Object.keys(otpStore).find((key) => otpStore[key]?.otp === otp);
+
+    if (!email) {
+      return res.status(400).json({ message: "Invalid OTP." });
+    }
+
+  
+      // Check if OTP is expired or incorrect
+      if (isOTPExpired(email)) {
+        return res.status(400).json({ message: "OTP has expired. Please request a new one." });
+      }
+  
+      // Retrieve user data from the temporary store
+      const userData = registrationDataStore[email];
+      if (!userData) {
+        return res.status(400).json({ message: "User data not found. Please try again." });
+      }
+  
+      const { fullName, username, password, gender } = userData;
+  
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Generate profile photo based on gender
+      const maleProfilePhoto = `https://avatar.iran.liara.run/public/boy?username=${username}`;
+      const femaleProfilePhoto = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+  
+      // Save the user permanently in the database
+      await User.create({
+        fullName,
+        email,
+        username,
+        password: hashedPassword,
+        profilePhoto: gender === "male" ? maleProfilePhoto : femaleProfilePhoto,
+        gender,
+      });
+  
+      // Clear temporary store and OTP store
+      delete registrationDataStore[email];
+      delete otpStore[email];
+  
+      return res.status(201).json({
+        message: "Account created successfully!",
+        success: true,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Server error. Please try again." });
+    }
+  };
 export const login= async(req,res)=>{
     try{
         const {username, password} = req.body;
@@ -123,3 +182,5 @@ export const getOtherUsers=async(req,res)=>{
         console.log(error);
     }
 }
+
+export { registrationDataStore };

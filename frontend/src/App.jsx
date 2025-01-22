@@ -4,6 +4,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom"
 import HomePage from './components/HomePage.jsx'
 import Signup from './components/Signup.jsx'
 import Login from '../src/components/Login.jsx'
+import OTP from './components/otp.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import io from "socket.io-client"
 import { setSocket } from './redux/socketSlice.js'
@@ -22,6 +23,11 @@ const router=createBrowserRouter([
   {
     path:"/login",
     element:<Login/>
+  },
+  {
+    path:'/otpAuth',
+    element:<OTP/>
+
   },
   {
     path:"/home",

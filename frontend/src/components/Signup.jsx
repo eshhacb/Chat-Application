@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import validator from 'validator'; 
-import { FaRegCircleCheck } from "react-icons/fa6";
-
 
 const Signup = () => {
   const [user, setUser]=useState({
@@ -17,6 +15,7 @@ const Signup = () => {
   });
   
   const [isEmailValid, setIsEmailValid] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate=useNavigate();
 
   //handling checkbox
@@ -38,6 +37,14 @@ const Signup = () => {
 
   const onSubmitHandler=async (e)=>{
      e.preventDefault();
+
+     if (user.password !== user.confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+
      try{
       console.log(user);
         const res= await axios.post(`http://localhost:8080/api/v1/user/register`,user,{
@@ -47,13 +54,17 @@ const Signup = () => {
           withCredentials:true
         });
        if(res.data.success){
-        navigate("/login");
         toast.success(res.data.message);
+        navigate("/otpAuth");
+       
        }
      }catch(error){
-        toast.error(error.response.data.message);
-        console.log(error);
-     }
+       toast.error(error.response?.data?.message || 'Something went wrong!');
+      console.log(error);
+    } finally {
+      setLoading(false); // Set loading to false once done
+    }
+
       setUser({
         fullName:"",
         email:"",
