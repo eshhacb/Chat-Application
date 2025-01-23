@@ -61,24 +61,42 @@ const OTP = () => {
 
 
   return (
-    <div className="otp-container">
-      <h2>Enter OTP</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={otp}
-          onChange={handleOtpChange}
-          maxLength="6"
-          placeholder="Enter 6-digit OTP"
-          className="otp-input"
-        />
-        {error && <p className="error-message">{error}</p>}
-        <button type="submit" className="submit-btn" disabled={loading}>
-          {loading ? 'Verifying...' : 'Verify OTP'}
-        </button>
-      </form>
+    <div className=" w-screen flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-400 to-teal-400">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-96">
+        <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">
+          OTP Verification
+        </h2>
+        <p className="text-sm text-gray-500 text-center mb-6">
+          Enter the 6-digit OTP sent to your email
+        </p>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            value={otp}
+            onChange={handleOtpChange}
+            maxLength="6"
+            placeholder="Enter OTP"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
+          />
+          {error && (
+            <p className="text-sm text-red-500 font-medium text-center">
+              {error}
+            </p>
+          )}
+          <button
+            type="submit"
+            className={`w-full py-2 px-4 rounded-lg text-white font-semibold ${
+              loading
+                ? 'bg-blue-300 cursor-not-allowed'
+                : 'bg-blue-500 hover:bg-blue-600'
+            } transition-colors duration-200`}
+            disabled={loading}
+          >
+            {loading ? 'Verifying...' : 'Verify OTP'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
-
 export default OTP;
