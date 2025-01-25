@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useEmailContext } from '../context/EmailContext.jsx'; 
 
 const OTP = () => {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleOtpChange = (e) => {
@@ -59,6 +61,37 @@ const OTP = () => {
     }
   };
 
+  // Get email from context
+  const { email } = useEmailContext();
+
+  useEffect(() => {
+    if (!email) {
+      navigate("/signup"); // Redirect to signup if email is not available in context
+    }
+  }, [email, navigate]);
+
+  const handleResendOtp = async () => {
+    setResendLoading(true); // Set resend loading state to true
+    try {
+      const res = await axios.post('http://localhost:8080/api/v1/user/resendOTP', { email }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message || 'Failed to resend OTP');
+      }
+    } catch (error) {
+      toast.error('An error occurred while resending OTP');
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
 
   return (
     <div className=" w-screen flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-400 to-teal-400">
@@ -83,17 +116,23 @@ const OTP = () => {
               {error}
             </p>
           )}
-          <button
-            type="submit"
-            className={`w-full py-2 px-4 rounded-lg text-white font-semibold ${
-              loading
-                ? 'bg-blue-300 cursor-not-allowed'
-                : 'bg-blue-500 hover:bg-blue-600'
-            } transition-colors duration-200`}
-            disabled={loading}
-          >
-            {loading ? 'Verifying...' : 'Verify OTP'}
-          </button>
+          <div className="flex justify-between">
+            <button
+              type="button"
+              onClick={handleResendOtp}
+              className={`py-2 px-4 text-white font-semibold rounded-lg ${resendLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+              disabled={resendLoading} // Disable when loading
+            >
+              {resendLoading ? 'Resending...' : 'Resend OTP'}
+            </button>
+            <button
+              type="submit"
+              className={`py-2 px-4 rounded-lg text-white font-semibold ${loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+              disabled={loading}
+            >
+              {loading ? 'Verifying...' : 'Verify OTP'}
+            </button>
+          </div>
         </form>
       </div>
     </div>

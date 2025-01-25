@@ -111,6 +111,34 @@ export const verify = async (req, res) => {
       return res.status(500).json({ message: "Server error. Please try again." });
     }
   };
+
+  export const resendOTP = async (req, res) => {
+    try {
+        // Retrieve the email directly from registrationDataStore
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: "Email not found. Please register first." });
+        }
+
+        // Check if OTP for the email already exists and is not expired
+        if (otpStore[email] && !isOTPExpired(email)) {
+          delete otpStore[email];
+        }
+
+        // Send OTP to the email
+        sendOTP(email); // Resend OTP using the existing sendOTP function
+
+        return res.status(200).json({
+            message: "OTP has been resent to your email.",
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server error. Please try again." });
+    }
+};
+
 export const login= async(req,res)=>{
     try{
         const {username, password} = req.body;

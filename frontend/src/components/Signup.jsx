@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import validator from 'validator'; 
+import { useEmailContext } from '../context/EmailContext.jsx'; 
 
 const Signup = () => {
   const [user, setUser]=useState({
@@ -17,6 +18,9 @@ const Signup = () => {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [loading, setLoading] = useState(false); // Loading state
   const navigate=useNavigate();
+
+    // Get the setEmail function from context
+    const { setEmail } = useEmailContext();
 
   //handling checkbox
 
@@ -55,6 +59,8 @@ const Signup = () => {
         });
        if(res.data.success){
         toast.success(res.data.message);
+
+        setEmail(user.email);
         navigate("/otpAuth");
        
        }

@@ -7,14 +7,17 @@ import {Provider} from 'react-redux';
 import store, { persistor } from './redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist'
+import { EmailProvider } from './context/EmailContext';
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
      <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+      <EmailProvider>
         <App />
         <Toaster />
+      </EmailProvider>
       </PersistGate>
     </Provider> 
   </StrictMode>,
