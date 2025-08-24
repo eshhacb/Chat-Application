@@ -1,0 +1,31 @@
+{
+	"id": "chat-app-production-env",
+	"name": "Chat App - Production",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "https://convoconnectbackend.vercel.app",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "receiverId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment"
+}

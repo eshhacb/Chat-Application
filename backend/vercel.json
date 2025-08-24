@@ -9,11 +9,16 @@
   "routes": [
     {
       "src": "/socket.io/(.*)",
-      "dest": "index.js"
+      "dest": "/index.js"
     },
     {
       "src": "/(.*)",
-      "dest": "index.js"
+      "dest": "/index.js"
     }
-  ]
+  ],
+  "functions": {
+    "index.js": {
+      "maxDuration": 10
+    }
+  }
 }
