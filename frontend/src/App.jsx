@@ -42,12 +42,14 @@ function App() {
 
   useEffect(()=>{
     if(authUser){
-      const socket=io('https://convoconnectbackend.vercel.app/',{
-        path:'/socket',
-        reconnection:'true',
+      const socket=io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000',{
+        path:'/socket.io/',
+        reconnection: true,
         transports: ['websocket','polling'],
+        withCredentials: true,
         query:{
-          userId: authUser._id},
+          userId: authUser._id
+        }
       });
       dispatch(setSocket(socket));
 

@@ -9,13 +9,14 @@ const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
-    path: '/socket',
-    wssEngine: ['ws'],
+    path: '/socket.io/',
     transports: ['websocket', 'polling'],
     cors: {
-        origin: process.env.FRONTEND_URL,
+        origin: [process.env.FRONTEND_URL, 'https://convoconnect-snowy.vercel.app'],
         methods: ['GET', 'POST'],
+        credentials: true
     },
+    allowEIO3: true
 });
 
 export const getReceiverSocketId = (receiverId) => {

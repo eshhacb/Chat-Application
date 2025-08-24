@@ -15,12 +15,23 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cookieParser());
 const corsOption={
-    origin: process.env.FRONTEND_URL,
-    credentials:true
+    origin: [process.env.FRONTEND_URL, 'https://convoconnect-snowy.vercel.app'],
+    credentials:true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 };
 app.use(cors(corsOption));
 
 //this is a middleware and this parses the data to make it available as req.body
+
+//health check endpoint
+app.get("/", (req, res) => {
+    res.json({
+        success: true,
+        message: "Backend is running successfully!",
+        timestamp: new Date().toISOString()
+    });
+});
 
 //routes
 app.use("/api/v1/user",userRoute);
