@@ -36,7 +36,7 @@ const OTP = () => {
     try {
       console.log('Sending OTP to server...');
 
-      const res = await axios.post('http://localhost:8080/api/v1/user/verify', { otp }, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/verify`, { otp }, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -73,7 +73,7 @@ const OTP = () => {
   const handleResendOtp = async () => {
     setResendLoading(true); // Set resend loading state to true
     try {
-      const res = await axios.post('http://localhost:8080/api/v1/user/resendOTP', { email }, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/resendOTP`, { email }, {
         headers: {
           'Content-Type': 'application/json',
         },

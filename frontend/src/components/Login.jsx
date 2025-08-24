@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import { setAuthUser } from '../redux/userSlice';
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
   const [user, setUser]=useState({
@@ -17,7 +18,7 @@ const Login = () => {
         e.preventDefault();
         try{
           console.log(user);
-            const res= await axios.post(`http://localhost:8080/api/v1/user/login`,user,{
+            const res= await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/login`,user,{
               headers:{
                 'Content-Type':'application/json'
               },
