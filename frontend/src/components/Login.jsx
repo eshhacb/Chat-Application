@@ -17,7 +17,7 @@ const Login = () => {
         e.preventDefault();
         try{
           console.log(user);
-            const res= await axios.post(`http://localhost:8080/api/v1/user/login`,user,{
+            const res= await axios.post(`/api/v1/user/login`,user,{
               headers:{
                 'Content-Type':'application/json'
               },
@@ -66,7 +66,8 @@ const Login = () => {
            onChange={(e) => setUser({ ...user, password: e.target.value })}
            className='w-full input input-bordered h-10' 
            type="password" 
-           placeholder="Password" />
+           placeholder="Password" 
+           autocomplete="current-password" />
         </div>
 
         <p className='text-center my-2'>Don't have an account? <Link to="/signup" className="text-blue-600 underline"> signup </Link></p>

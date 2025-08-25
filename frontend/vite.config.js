@@ -10,7 +10,14 @@ export default defineConfig({
     },
   },
   server: {
+    port: 5173,
     proxy: {
+      // Proxy API requests to your backend server
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
+      },
       // Proxy WebSocket requests to your backend server
       '/socket.io': {
         target: 'http://localhost:8080',

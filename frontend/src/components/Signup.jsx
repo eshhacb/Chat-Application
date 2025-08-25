@@ -51,7 +51,7 @@ const Signup = () => {
 
      try{
       console.log(user);
-        const res= await axios.post(`http://localhost:8080/api/v1/user/register`,user,{
+        const res= await axios.post(`/api/v1/user/register`,user,{
           headers:{
             'Content-Type':'application/json'
           },
@@ -131,7 +131,7 @@ const Signup = () => {
           <input 
           value={user.password}
           onChange={(e)=>setUser({...user,password:e.target.value})}
-          className='w-full input input-bordered h-10' type="password" placeholder="Password" />
+          className='w-full input input-bordered h-10' type="password" placeholder="Password" autocomplete="new-password" />
         </div>
         <div>
           <label className="label p-2">
@@ -140,7 +140,7 @@ const Signup = () => {
           <input 
           value={user.confirmPassword}
           onChange={(e)=>setUser({...user,confirmPassword:e.target.value})}
-          className='w-full input input-bordered h-10' type="password" placeholder="Confirm Password" />
+          className='w-full input input-bordered h-10' type="password" placeholder="Confirm Password" autocomplete="new-password" />
         </div>
 
         <div className='flex justify-center items-center my-4'>

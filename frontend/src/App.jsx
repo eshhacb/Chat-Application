@@ -42,7 +42,7 @@ function App() {
 
   useEffect(()=>{
     if(authUser){
-      const socket=io('http://localhost:8080',{
+      const socket=io('/',{
         path:'/socket',
         reconnection:'true',
         transports: ['websocket','polling'],
