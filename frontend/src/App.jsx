@@ -3,8 +3,8 @@ import './App.css'
 import {createBrowserRouter, RouterProvider} from "react-router-dom"
 import HomePage from './components/HomePage.jsx'
 import Signup from './components/Signup.jsx'
-import Login from '../src/components/Login.jsx'
-import OTP from './components/otp.jsx'
+import Login from './components/Login.jsx'
+import OTP from './components/Otp.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import io from "socket.io-client"
 import { setSocket } from './redux/socketSlice.js'
