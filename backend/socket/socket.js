@@ -9,42 +9,47 @@ const app = express();
 
 const server = http.createServer(app);
 
-// Allow configuring frontend origin for Socket.IO CORS in deployment
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:8080';
-
+// Same-origin deployment: allow the current origin dynamically
 const io = new Server(server, {
     path: '/socket',
-    wssEngine: ['ws'],
     transports: ['websocket', 'polling'],
     cors: {
-        origin: FRONTEND_ORIGIN,
+        origin: true,
         methods: ['GET', 'POST'],
         credentials: true,
     },
 });
 
-export const getReceiverSocketId = (receiverId) => {
-    return userSocketMap[receiverId];
-}
+// Multiple sockets per userId
+const userSocketMap = new Map(); // userId -> Set(socketId)
 
-const userSocketMap = {}; // { userId -> socketId }
+export const getReceiverSocketIds = (receiverId) => {
+    return Array.from(userSocketMap.get(receiverId) || []);
+};
 
 // Handle connections
 io.on('connection', (socket) => {
     console.log('user connected', socket.id);
 
-    const userId = socket.handshake.query.userId;
-    if (userId !== 'undefined') {
-        userSocketMap[userId] = socket.id;
+    const userId = socket.handshake?.query?.userId; // or switch to handshake.auth if preferred
+    if (userId && userId !== 'undefined') {
+        if (!userSocketMap.has(userId)) userSocketMap.set(userId, new Set());
+        userSocketMap.get(userId).add(socket.id);
+        console.log('Mapped user', userId, '->', socket.id);
     }
 
-    io.emit('getOnlineUsers', Object.keys(userSocketMap));
+    io.emit('getOnlineUsers', Array.from(userSocketMap.keys()));
 
     socket.on('disconnect', () => {
         console.log('user disconnected', socket.id);
-        delete userSocketMap[userId];
-        io.emit('getOnlineUsers', Object.keys(userSocketMap));
-        // broadcast again
+        if (userId) {
+            const set = userSocketMap.get(userId);
+            if (set) {
+                set.delete(socket.id);
+                if (set.size === 0) userSocketMap.delete(userId);
+            }
+        }
+        io.emit('getOnlineUsers', Array.from(userSocketMap.keys()));
     });
 });
 

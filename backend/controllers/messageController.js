@@ -1,6 +1,6 @@
 import {Conversation} from "../models/conversationModel.js";
 import {Message} from "../models/messageModel.js";
-import { getReceiverSocketId, io } from "../socket/socket.js";
+import { getReceiverSocketIds, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
     try {
@@ -33,12 +33,11 @@ export const sendMessage = async (req, res) => {
         // Save both the conversation and the message
         await Promise.all([gotConversation.save(), newMessage.save()]);
 
-        // Socket IO: Find receiver's socket ID and emit the message
-        const receiverSocketId = getReceiverSocketId(receiverId);
-        if (receiverSocketId) {
-            // Emit new message to the receiver
-            io.to(receiverSocketId).emit('newMessage', newMessage);
-            console.log('Message sent to:', receiverSocketId, 'Message:', newMessage);
+        // Socket IO: Find receiver's socket IDs and emit the message to all
+        const receiverSocketIds = getReceiverSocketIds(receiverId);
+        if (receiverSocketIds.length) {
+            receiverSocketIds.forEach((sid) => io.to(sid).emit('newMessage', newMessage));
+            console.log('Message sent to sockets:', receiverSocketIds, 'Message:', newMessage);
         } else {
             console.log('Receiver not connected or socket ID not found. Receiver ID:', receiverId);
         }
