@@ -42,12 +42,13 @@ function App() {
 
   useEffect(()=>{
     if(authUser){
-      const socket=io('/',{
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '/';
+      const socket=io(backendUrl,{
         path:'/socket',
-        reconnection:'true',
+        reconnection:true,
         transports: ['websocket','polling'],
-        query:{
-          userId: authUser._id},
+        query:{ userId: authUser._id },
+        withCredentials: true,
       });
       dispatch(setSocket(socket));
 
