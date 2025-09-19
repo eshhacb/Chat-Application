@@ -7,10 +7,21 @@ import {useNavigate} from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
 import { setAuthUser, setOtherUsers } from '../redux/userSlice';
 import {persistor} from '../redux/store.js'
+import { 
+  Box, 
+  TextField, 
+  Button, 
+  Avatar,
+  Typography,
+  Divider,
+  IconButton,
+  Tooltip
+} from '@mui/material';
+import { Person, Logout } from '@mui/icons-material';
 
 const Sidebar = () => {
     const [search,setSearch]=useState('');
-    const {otherUsers}=useSelector(store=>store.user);
+    const {otherUsers, authUser}=useSelector(store=>store.user);
     const [originalOtherUsers, setOriginalOtherUsers] = useState([]);
     const dispatch= useDispatch();
 
@@ -65,24 +76,75 @@ const Sidebar = () => {
     }
 };
   return (
-    <div className='border-r border-slate-500 p-4 flex flex-col'>
-        <form onSubmit={searchSubmitHandler} action="" className='flex items-center gap-2'>
-            <input 
-            value={search}
-            onChange={onSearchChange}
-            className='input input-bordered rounded-md'
-            type="text" placeholder='Search'/>
-        
-        <button type='submit' className='btn bg-zinc-700 text-white'>
-        <BiSearch className='w-6 h-6 outline-none'/>
-        </button>
-        </form>
-        <div className="divider px-3"></div>
+    <Box sx={{ 
+      borderRight: 1, 
+      borderColor: 'divider', 
+      p: 2, 
+      display: 'flex', 
+      flexDirection: 'column',
+      minWidth: 300,
+      backgroundColor: 'background.paper'
+    }}>
+      {/* Profile Section */}
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <Avatar 
+          sx={{ 
+            width: 40, 
+            height: 40, 
+            mr: 2,
+            bgcolor: 'primary.main'
+          }}
+        >
+          <Person />
+        </Avatar>
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="subtitle1" fontWeight="bold">
+            {authUser?.fullName}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {authUser?.username}
+          </Typography>
+        </Box>
+        <Tooltip title="Logout">
+          <IconButton 
+            onClick={logoutHandler}
+            size="small"
+            color="error"
+          >
+            <Logout />
+          </IconButton>
+        </Tooltip>
+      </Box>
+
+      <Divider sx={{ mb: 2 }} />
+
+      {/* Search Section */}
+      <Box component="form" onSubmit={searchSubmitHandler} sx={{ display: 'flex', gap: 1, mb: 2 }}>
+        <TextField
+          fullWidth
+          size="small"
+          placeholder="Search users..."
+          value={search}
+          onChange={onSearchChange}
+          variant="outlined"
+        />
+        <Button 
+          type="submit" 
+          variant="contained" 
+          size="small"
+          sx={{ minWidth: 'auto', px: 2 }}
+        >
+          <BiSearch size={20} />
+        </Button>
+      </Box>
+
+      <Divider sx={{ mb: 2 }} />
+
+      {/* Users List */}
+      <Box sx={{ flex: 1, overflow: 'auto' }}>
         <OtherUsers/>
-        <div className='mt-2'>
-                <button onClick={logoutHandler} className='btn btn-sm'>Logout</button>
-        </div>
-    </div>
+      </Box>
+    </Box>
   )
 }
 

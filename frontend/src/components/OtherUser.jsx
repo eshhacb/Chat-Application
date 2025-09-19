@@ -1,6 +1,16 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { setSelectedUser } from '../redux/userSlice';
+import { 
+  Box, 
+  Avatar, 
+  Typography, 
+  ListItem, 
+  ListItemAvatar, 
+  ListItemText,
+  Chip
+} from '@mui/material';
+import { Person } from '@mui/icons-material';
 
 const OtherUser = ({user}) => {
   
@@ -13,21 +23,64 @@ const OtherUser = ({user}) => {
   }
 
   return (
-    <>
-            <div onClick={()=>selectedUserHandler(user)} className={` ${selectedUser?._id === user?._id ? 'bg-zinc-200 text-black' : 'text-white'} flex gap-2 hover:text-black items-center hover:bg-zinc-400 rounded p-2 cursor-pointer`}>
-                <div className={`avatar ${isOnline ? 'online' : ''}`}>
-                     <div className='w-12 rounded-full'>
-                        <img src={user?.profilePhoto}alt="user-profile" />
-                     </div>
-                </div>
-                <div className='flex flex-col flex-1'>
-                 <div className='flex justify-between gap-2'>
-                        <p>{user?.fullName}</p>
-                 </div>
-                </div>
-             </div>
-      <div className='divider my-0 py-0 h-1'></div>
-    </>
+    <ListItem
+      button
+      onClick={() => selectedUserHandler(user)}
+      sx={{
+        backgroundColor: selectedUser?._id === user?._id ? 'action.selected' : 'transparent',
+        borderRadius: 1,
+        mb: 0.5,
+        '&:hover': {
+          backgroundColor: 'action.hover',
+        },
+      }}
+    >
+      <ListItemAvatar>
+        <Box sx={{ position: 'relative' }}>
+          <Avatar sx={{ bgcolor: 'primary.main' }}>
+            <Person />
+          </Avatar>
+          {isOnline && (
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                width: 12,
+                height: 12,
+                backgroundColor: 'success.main',
+                borderRadius: '50%',
+                border: 2,
+                borderColor: 'background.paper',
+              }}
+            />
+          )}
+        </Box>
+      </ListItemAvatar>
+      <ListItemText
+        primary={
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="subtitle1" fontWeight="medium">
+              {user?.fullName}
+            </Typography>
+            {isOnline && (
+              <Chip 
+                label="Online" 
+                size="small" 
+                color="success" 
+                variant="outlined"
+                sx={{ height: 20, fontSize: '0.7rem' }}
+              />
+            )}
+          </Box>
+        }
+        secondary={
+          <Typography variant="caption" color="text.secondary">
+            @{user?.username}
+          </Typography>
+        }
+      />
+    </ListItem>
   )
 }
 

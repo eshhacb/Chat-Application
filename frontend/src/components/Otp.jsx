@@ -3,6 +3,16 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useEmailContext } from '../context/EmailContext.jsx'; 
+import { 
+  Box, 
+  Card, 
+  CardContent, 
+  TextField, 
+  Button, 
+  Typography, 
+  Alert,
+  CircularProgress
+} from '@mui/material'; 
 
 const OTP = () => {
   const [otp, setOtp] = useState('');
@@ -94,48 +104,70 @@ const OTP = () => {
 
 
   return (
-    <div className=" w-screen flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-400 to-teal-400">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-96">
-        <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">
-          OTP Verification
-        </h2>
-        <p className="text-sm text-gray-500 text-center mb-6">
-          Enter the 6-digit OTP sent to your email
-        </p>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            value={otp}
-            onChange={handleOtpChange}
-            maxLength="6"
-            placeholder="Enter OTP"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
-          />
-          {error && (
-            <p className="text-sm text-red-500 font-medium text-center">
-              {error}
-            </p>
-          )}
-          <div className="flex justify-between">
-            <button
-              type="button"
-              onClick={handleResendOtp}
-              className={`py-2 px-4 text-white font-semibold rounded-lg ${resendLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
-              disabled={resendLoading} // Disable when loading
-            >
-              {resendLoading ? 'Resending...' : 'Resend OTP'}
-            </button>
-            <button
-              type="submit"
-              className={`py-2 px-4 rounded-lg text-white font-semibold ${loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
-              disabled={loading}
-            >
-              {loading ? 'Verifying...' : 'Verify OTP'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Box sx={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      backgroundColor: 'background.default'
+    }}>
+      <Card sx={{ 
+        p: 4, 
+        borderRadius: 2, 
+        boxShadow: 3,
+        backgroundColor: 'background.paper',
+        minWidth: 400
+      }}>
+        <CardContent>
+          <Typography variant="h4" component="h2" align="center" gutterBottom>
+            OTP Verification
+          </Typography>
+          <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
+            Enter the 6-digit OTP sent to your email
+          </Typography>
+          
+          <Box component="form" onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label="Enter OTP"
+              value={otp}
+              onChange={handleOtpChange}
+              inputProps={{ maxLength: 6 }}
+              margin="normal"
+              variant="outlined"
+              required
+              error={!!error}
+              helperText={error}
+            />
+            
+            {error && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {error}
+              </Alert>
+            )}
+            
+            <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+              <Button
+                variant="outlined"
+                onClick={handleResendOtp}
+                disabled={resendLoading}
+                sx={{ flex: 1 }}
+              >
+                {resendLoading ? <CircularProgress size={20} /> : 'Resend OTP'}
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={loading}
+                sx={{ flex: 1 }}
+              >
+                {loading ? <CircularProgress size={20} /> : 'Verify OTP'}
+              </Button>
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 export default OTP;

@@ -10,6 +10,29 @@ import io from "socket.io-client"
 import { setSocket } from './redux/socketSlice.js'
 import { setOnlineUsers } from './redux/userSlice.js'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import { Box } from '@mui/material'
+
+// Create Material UI theme
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#1976d2',
+    },
+    secondary: {
+      main: '#dc004e',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1e1e1e',
+    },
+  },
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+  },
+});
 
 const router=createBrowserRouter([
   {
@@ -69,11 +92,20 @@ function App() {
 
 
   return (
-    <>
-      <div className=" h-screen flex items-center justify-center">
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box 
+        sx={{ 
+          minHeight: '100vh', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          backgroundColor: 'background.default'
+        }}
+      >
         <RouterProvider router={router}/>
-      </div>
-    </>
+      </Box>
+    </ThemeProvider>
   );
 }
 export default App;

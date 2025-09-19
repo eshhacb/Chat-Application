@@ -4,6 +4,21 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import validator from 'validator'; 
 import { useEmailContext } from '../context/EmailContext.jsx'; 
+import { 
+  Box, 
+  Card, 
+  CardContent, 
+  TextField, 
+  Button, 
+  Typography, 
+  Link as MuiLink,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  CircularProgress
+} from '@mui/material'; 
 
 const Signup = () => {
   const [user, setUser]=useState({
@@ -82,103 +97,111 @@ const Signup = () => {
       setIsEmailValid(false); // Reset validation status
   } 
   return (
-    <div className="min-w-96 mx-auto">
-      <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100">
-      <h1 className="text-3xl font-bold text-center ">Signup</h1>
-      <form onSubmit={onSubmitHandler} action="">
-        <div>
-          <label className="label p-2">
-            <span className='text-base label-text '>Full Name</span>
-          </label>
-          <input 
-          value={user.fullName}
-          onChange={(e)=>setUser({...user,fullName:e.target.value})}
-          className='w-full input input-bordered h-10' type="text" placeholder="Full Name" />
-        </div>
-        
-       {/* //adding the email  */}
-        <div className="relative">
-          <label className="label p-2">
-            <span className='text-base label-text '>Email Address</span>
-          </label>
-          <input 
-          value={user.email}
-          onChange={(e) => {
-            setUser({ ...user, email: e.target.value });
-            validateEmail(e.target.value); // Validate email on change
-          }}
-          className={`w-full input input-bordered h-10 ${
-            isEmailValid ? "border-green-500" : "border-red-500"
-        }`}
-          type="email"
-          placeholder="Email-Id"
-        />
-        </div>
+    <Box sx={{ minWidth: 400, mx: 'auto' }}>
+      <Card sx={{ 
+        p: 3, 
+        borderRadius: 2, 
+        boxShadow: 3,
+        backgroundColor: 'background.paper'
+      }}>
+        <CardContent>
+          <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 3 }}>
+            Signup
+          </Typography>
+          <Box component="form" onSubmit={onSubmitHandler}>
+            <TextField
+              fullWidth
+              label="Full Name"
+              value={user.fullName}
+              onChange={(e) => setUser({...user, fullName: e.target.value})}
+              margin="normal"
+              variant="outlined"
+              required
+            />
+            
+            <TextField
+              fullWidth
+              label="Email Address"
+              type="email"
+              value={user.email}
+              onChange={(e) => {
+                setUser({ ...user, email: e.target.value });
+                validateEmail(e.target.value);
+              }}
+              margin="normal"
+              variant="outlined"
+              required
+              error={user.email !== '' && !isEmailValid}
+              helperText={user.email !== '' && !isEmailValid ? 'Please enter a valid email' : ''}
+            />
 
-        <div>
-          <label className="label p-2">
-            <span className='text-base label-text '>Username</span>
-          </label>
-          <input 
-          value={user.username}
-          onChange={(e)=>setUser({...user,username:e.target.value})}
-          className='w-full input input-bordered h-10' type="text" placeholder="Username" />
-        </div>
-        <div>
-          <label className="label p-2">
-            <span className='text-base label-text '>Password</span>
-          </label>
-          <input 
-          value={user.password}
-          onChange={(e)=>setUser({...user,password:e.target.value})}
-          className='w-full input input-bordered h-10' type="password" placeholder="Password" autocomplete="new-password" />
-        </div>
-        <div>
-          <label className="label p-2">
-            <span className='text-base label-text '>Confirm Password</span>
-          </label>
-          <input 
-          value={user.confirmPassword}
-          onChange={(e)=>setUser({...user,confirmPassword:e.target.value})}
-          className='w-full input input-bordered h-10' type="password" placeholder="Confirm Password" autocomplete="new-password" />
-        </div>
+            <TextField
+              fullWidth
+              label="Username"
+              value={user.username}
+              onChange={(e) => setUser({...user, username: e.target.value})}
+              margin="normal"
+              variant="outlined"
+              required
+            />
 
-        <div className='flex justify-center items-center my-4'>
-            <div className='flex items-center'>
-              <p>Male</p>
-              <input
-                type="radio"
-                checked={user.gender==='male'}
-                onChange={()=>handleCheckbox('male')}
-                name='gender'
-                className="checkbox mx-2" />
-            </div>
-            <div className='flex items-center'>
-              <p>Female</p>
-              <input
-                type="radio"
-                checked={user.gender==='female'}
-                onChange={()=>handleCheckbox('female')}
-                name='gender'
-                className="checkbox mx-2" />
-            </div>
-            <div className='flex items-center'>
-              <p>Other</p>
-              <input
-                type="radio"
-                checked={user.gender==='other'}
-                onChange={()=>handleCheckbox('other')}
-                name='gender'
-                className="checkbox mx-2" />
-            </div>
-        </div>
-        <p className='text-center my-2'>Already have an account? <Link to="/login" className="text-blue-600 underline"> login </Link></p>
-          <div>
-            <button type='submit' className='btn btn-block btn-sm mt-2 border border-slate-700'>Signup</button>
-          </div>
-      </form>
-      </div>
-    </div>
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              value={user.password}
+              onChange={(e) => setUser({...user, password: e.target.value})}
+              margin="normal"
+              variant="outlined"
+              required
+              autoComplete="new-password"
+            />
+
+            <TextField
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              value={user.confirmPassword}
+              onChange={(e) => setUser({...user, confirmPassword: e.target.value})}
+              margin="normal"
+              variant="outlined"
+              required
+              autoComplete="new-password"
+            />
+
+            <FormControl component="fieldset" sx={{ mt: 2, mb: 2 }}>
+              <FormLabel component="legend">Gender</FormLabel>
+              <RadioGroup
+                row
+                value={user.gender}
+                onChange={(e) => handleCheckbox(e.target.value)}
+              >
+                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                <FormControlLabel value="other" control={<Radio />} label="Other" />
+              </RadioGroup>
+            </FormControl>
+
+            <Typography align="center" sx={{ my: 2 }}>
+              Already have an account?{' '}
+              <MuiLink component={Link} to="/login" color="primary">
+                Login
+              </MuiLink>
+            </Typography>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={loading}
+              sx={{ mt: 2, py: 1.5 }}
+            >
+              {loading ? <CircularProgress size={24} /> : 'Signup'}
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   )
 }
 

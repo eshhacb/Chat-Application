@@ -3,6 +3,13 @@ import { IoSend } from "react-icons/io5";
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import { setMessages } from '../redux/messageSlice';
+import { 
+  Box, 
+  TextField, 
+  IconButton, 
+  Paper 
+} from '@mui/material';
+import { Send } from '@mui/icons-material';
 
 const SendInput = () => {
      const [message,setMessage]=useState('');
@@ -29,21 +36,36 @@ const SendInput = () => {
      }
 
   return (
-   <form onSubmit={onSubmitHandler} className='px-4 my-3'>
-        <div className='w-full relative'>
-            <input
-                    value={message}
-                    onChange={(e)=>setMessage(e.target.value)}
-                    type="text"
-                    placeholder='Message'
-                    className='border text-sm rounded-lg block w-full p-3 border-zinc-500 bg-gray-500 text-white'
-             />
-            <button 
-               type="submit"         className='absolute flex inset-y-0 end-0 items-center pr-4'>
-                    <IoSend />
-            </button>
-        </div>
-   </form>
+   <Box component="form" onSubmit={onSubmitHandler} sx={{ p: 2 }}>
+        <Paper sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          p: 1,
+          backgroundColor: 'background.paper',
+          border: 1,
+          borderColor: 'divider'
+        }}>
+            <TextField
+                fullWidth
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type a message..."
+                variant="standard"
+                InputProps={{
+                  disableUnderline: true,
+                  sx: { px: 1 }
+                }}
+                sx={{ flex: 1 }}
+            />
+            <IconButton 
+                type="submit"
+                color="primary"
+                disabled={!message.trim()}
+            >
+                <Send />
+            </IconButton>
+        </Paper>
+   </Box>
   )
 }
 

@@ -4,6 +4,15 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import { setAuthUser } from '../redux/userSlice';
+import { 
+  Box, 
+  Card, 
+  CardContent, 
+  TextField, 
+  Button, 
+  Typography, 
+  Link as MuiLink 
+} from '@mui/material';
 
 const Login = () => {
   const [user, setUser]=useState({
@@ -42,41 +51,56 @@ const Login = () => {
         })
     }
   return (
-    <div className="min-w-96 mx-auto">
-      <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100">
-      <h1 className="text-3xl font-bold text-center ">Login</h1>
-      <form onSubmit={onSubmitHandler} action="">
-        <div>
-          <label className="label p-2">
-            <span className='text-base label-text '>Username</span>
-          </label>
-          <input 
-          value={user.username}
-          onChange={(e) => setUser({ ...user, username: e.target.value })}
-          className='w-full input input-bordered h-10' 
-          type="text" 
-          placeholder="Username" />
-        </div>
-        <div>
-          <label className="label p-2">
-            <span className='text-base label-text '>Password</span>
-          </label>
-          <input 
-           value={user.password}
-           onChange={(e) => setUser({ ...user, password: e.target.value })}
-           className='w-full input input-bordered h-10' 
-           type="password" 
-           placeholder="Password" 
-           autocomplete="current-password" />
-        </div>
-
-        <p className='text-center my-2'>Don't have an account? <Link to="/signup" className="text-blue-600 underline"> signup </Link></p>
-          <div>
-            <button type='submit' className='btn btn-block btn-sm mt-2 border border-slate-700'>Login</button>
-          </div>
-      </form>
-      </div>
-    </div>
+    <Box sx={{ minWidth: 400, mx: 'auto' }}>
+      <Card sx={{ 
+        p: 3, 
+        borderRadius: 2, 
+        boxShadow: 3,
+        backgroundColor: 'background.paper'
+      }}>
+        <CardContent>
+          <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 3 }}>
+            Login
+          </Typography>
+          <Box component="form" onSubmit={onSubmitHandler}>
+            <TextField
+              fullWidth
+              label="Username"
+              value={user.username}
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
+              margin="normal"
+              variant="outlined"
+              required
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              margin="normal"
+              variant="outlined"
+              required
+              autoComplete="current-password"
+            />
+            <Typography align="center" sx={{ my: 2 }}>
+              Don't have an account?{' '}
+              <MuiLink component={Link} to="/signup" color="primary">
+                Sign up
+              </MuiLink>
+            </Typography>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, py: 1.5 }}
+            >
+              Login
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   )
 }
 

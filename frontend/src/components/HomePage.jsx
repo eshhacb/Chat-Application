@@ -1,13 +1,21 @@
 import React from 'react'
 import Sidebar from './Sidebar'
 import MessageContainer from './MessageContainer'
+import { Box } from '@mui/material'
 
 const HomePage = () => {
   return (
-    <div className='flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
+    <Box sx={{ 
+      display: 'flex', 
+      height: { xs: '450px', md: '550px' },
+      borderRadius: 2,
+      overflow: 'hidden',
+      backgroundColor: 'background.paper',
+      boxShadow: 3
+    }}>
       <Sidebar/>
       <MessageContainer/>
-    </div>
+    </Box>
   )
 }
 

@@ -3,6 +3,14 @@ import SendInput from "./SendInput";
 import Messages from "./Messages";
 import { useDispatch, useSelector } from "react-redux";
 import {setSelectedUser} from '../redux/userSlice';
+import { 
+  Box, 
+  Avatar, 
+  Typography, 
+  Chip,
+  Paper
+} from '@mui/material';
+import { Person } from '@mui/icons-material';
 
 const MessageContainer = () => {
   const {selectedUser, authUser, onlineUsers}=useSelector(store=>store.user);
@@ -14,28 +22,81 @@ const MessageContainer = () => {
     <>
     {
       selectedUser !== null ? (
-        <div className='md:min-w-[550px] flex flex-col'>
-          <div className='flex gap-2 items-center bg-zinc-800 text-white px-4 py-2 mb-2'>
-            <div className={`avatar ${isOnline ? 'online' : ''}`}>
-              <div className="w-12 rounded-full">
-                <img src={selectedUser?.profilePhoto} alt="user-profile" />
-              </div>
-            </div>
-            <div className="flex flex-col flex-1">
-               <div className="flex justify-between gap-2 ">
-                  <p>{selectedUser?.fullName}</p>
-               </div>
-             </div>
-        </div>
-        <Messages/>
-        <SendInput/>
-      </div>
+        <Box sx={{ 
+          minWidth: { md: 550 }, 
+          display: 'flex', 
+          flexDirection: 'column',
+          backgroundColor: 'background.paper'
+        }}>
+          <Paper sx={{ 
+            p: 2, 
+            mb: 1, 
+            backgroundColor: 'primary.main',
+            color: 'primary.contrastText',
+            borderRadius: 0
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ position: 'relative' }}>
+                <Avatar sx={{ bgcolor: 'primary.contrastText', color: 'primary.main' }}>
+                  <Person />
+                </Avatar>
+                {isOnline && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0,
+                      width: 12,
+                      height: 12,
+                      backgroundColor: 'success.main',
+                      borderRadius: '50%',
+                      border: 2,
+                      borderColor: 'primary.main',
+                    }}
+                  />
+                )}
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="h6" fontWeight="bold">
+                  {selectedUser?.fullName}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="caption">
+                    @{selectedUser?.username}
+                  </Typography>
+                  {isOnline && (
+                    <Chip 
+                      label="Online" 
+                      size="small" 
+                      color="success" 
+                      variant="outlined"
+                      sx={{ height: 20, fontSize: '0.7rem' }}
+                    />
+                  )}
+                </Box>
+              </Box>
+            </Box>
+          </Paper>
+          <Messages/>
+          <SendInput/>
+        </Box>
       ):  (
-        <div className='md:min-w-[550px] flex flex-col justify-center items-center'>
-            <h1 className='text-4xl text-white font-bold'>Hi,{authUser?.fullName} </h1>
-            <h1 className='text-2xl text-white'>Let's start a conversation</h1>
-
-        </div>
+        <Box sx={{ 
+          minWidth: { md: 550 }, 
+          display: 'flex', 
+          flexDirection: 'column', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          backgroundColor: 'background.paper',
+          p: 4
+        }}>
+          <Typography variant="h3" fontWeight="bold" gutterBottom>
+            Hi, {authUser?.fullName}
+          </Typography>
+          <Typography variant="h5" color="text.secondary">
+            Let's start a conversation
+          </Typography>
+        </Box>
     )
   }
     </>
