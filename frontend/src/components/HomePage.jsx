@@ -7,11 +7,10 @@ const HomePage = () => {
   return (
     <Box sx={{ 
       display: 'flex', 
-      height: { xs: '450px', md: '550px' },
-      borderRadius: 2,
-      overflow: 'hidden',
+      height: '100vh',
+      width: '100vw',
       backgroundColor: 'background.paper',
-      boxShadow: 3
+      overflow: 'hidden'
     }}>
       <Sidebar/>
       <MessageContainer/>

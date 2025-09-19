@@ -43,7 +43,7 @@ const Message = ({message}) => {
         </Avatar>
         <Paper sx={{ 
           p: 1.5,
-          backgroundColor: isOwnMessage ? 'primary.main' : 'grey.100',
+          backgroundColor: isOwnMessage ? 'primary.main' : 'grey.800',
           color: isOwnMessage ? 'primary.contrastText' : 'text.primary',
           borderRadius: 2,
           position: 'relative'

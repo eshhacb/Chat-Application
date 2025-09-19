@@ -96,11 +96,13 @@ function App() {
       <CssBaseline />
       <Box 
         sx={{ 
-          minHeight: '100vh', 
+          height: '100vh', 
+          width: '100vw',
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center',
-          backgroundColor: 'background.default'
+          backgroundColor: 'background.default',
+          overflow: 'hidden'
         }}
       >
         <RouterProvider router={router}/>
