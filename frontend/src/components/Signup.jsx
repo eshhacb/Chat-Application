@@ -97,18 +97,32 @@ const Signup = () => {
       setIsEmailValid(false); // Reset validation status
   } 
   return (
-    <Box sx={{ minWidth: 400, mx: 'auto' }}>
+    <Box sx={{ 
+      minWidth: 400, 
+      maxWidth: 600,
+      mx: 'auto',
+      px: 2
+    }}>
       <Card sx={{ 
-        p: 3, 
+        p: 4, 
         borderRadius: 2, 
         boxShadow: 3,
         backgroundColor: 'background.paper'
       }}>
-        <CardContent>
-          <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 3 }}>
+        <CardContent sx={{ p: 0 }}>
+          <Typography 
+            variant="h4" 
+            component="h1" 
+            align="center" 
+            gutterBottom 
+            sx={{ 
+              mb: 4,
+              fontWeight: 'bold'
+            }}
+          >
             Signup
           </Typography>
-          <Box component="form" onSubmit={onSubmitHandler}>
+          <Box component="form" onSubmit={onSubmitHandler} sx={{ width: '100%' }}>
             <TextField
               fullWidth
               label="Full Name"
@@ -117,6 +131,7 @@ const Signup = () => {
               margin="normal"
               variant="outlined"
               required
+              sx={{ mb: 2 }}
             />
             
             <TextField
@@ -133,6 +148,7 @@ const Signup = () => {
               required
               error={user.email !== '' && !isEmailValid}
               helperText={user.email !== '' && !isEmailValid ? 'Please enter a valid email' : ''}
+              sx={{ mb: 2 }}
             />
 
             <TextField
@@ -143,6 +159,7 @@ const Signup = () => {
               margin="normal"
               variant="outlined"
               required
+              sx={{ mb: 2 }}
             />
 
             <TextField
@@ -155,6 +172,7 @@ const Signup = () => {
               variant="outlined"
               required
               autoComplete="new-password"
+              sx={{ mb: 2 }}
             />
 
             <TextField
@@ -167,9 +185,10 @@ const Signup = () => {
               variant="outlined"
               required
               autoComplete="new-password"
+              sx={{ mb: 3 }}
             />
 
-            <FormControl component="fieldset" sx={{ mt: 2, mb: 2 }}>
+            <FormControl component="fieldset" sx={{ mt: 1, mb: 3 }}>
               <FormLabel component="legend">Gender</FormLabel>
               <RadioGroup
                 row
@@ -182,7 +201,7 @@ const Signup = () => {
               </RadioGroup>
             </FormControl>
 
-            <Typography align="center" sx={{ my: 2 }}>
+            <Typography align="center" sx={{ my: 3 }}>
               Already have an account?{' '}
               <MuiLink component={Link} to="/login" color="primary">
                 Login
@@ -194,7 +213,12 @@ const Signup = () => {
               fullWidth
               variant="contained"
               disabled={loading}
-              sx={{ mt: 2, py: 1.5 }}
+              sx={{ 
+                mt: 1, 
+                py: 1.5,
+                fontSize: '1.1rem',
+                fontWeight: 'bold'
+              }}
             >
               {loading ? <CircularProgress size={24} /> : 'Signup'}
             </Button>

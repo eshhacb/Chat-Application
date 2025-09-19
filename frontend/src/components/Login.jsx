@@ -51,18 +51,32 @@ const Login = () => {
         })
     }
   return (
-    <Box sx={{ minWidth: 400, mx: 'auto' }}>
+    <Box sx={{ 
+      minWidth: 400, 
+      maxWidth: 500,
+      mx: 'auto',
+      px: 2
+    }}>
       <Card sx={{ 
-        p: 3, 
+        p: 4, 
         borderRadius: 2, 
         boxShadow: 3,
         backgroundColor: 'background.paper'
       }}>
-        <CardContent>
-          <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 3 }}>
+        <CardContent sx={{ p: 0 }}>
+          <Typography 
+            variant="h4" 
+            component="h1" 
+            align="center" 
+            gutterBottom 
+            sx={{ 
+              mb: 4,
+              fontWeight: 'bold'
+            }}
+          >
             Login
           </Typography>
-          <Box component="form" onSubmit={onSubmitHandler}>
+          <Box component="form" onSubmit={onSubmitHandler} sx={{ width: '100%' }}>
             <TextField
               fullWidth
               label="Username"
@@ -71,6 +85,7 @@ const Login = () => {
               margin="normal"
               variant="outlined"
               required
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -82,8 +97,9 @@ const Login = () => {
               variant="outlined"
               required
               autoComplete="current-password"
+              sx={{ mb: 3 }}
             />
-            <Typography align="center" sx={{ my: 2 }}>
+            <Typography align="center" sx={{ my: 3 }}>
               Don't have an account?{' '}
               <MuiLink component={Link} to="/signup" color="primary">
                 Sign up
@@ -93,7 +109,12 @@ const Login = () => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 2, py: 1.5 }}
+              sx={{ 
+                mt: 1, 
+                py: 1.5,
+                fontSize: '1.1rem',
+                fontWeight: 'bold'
+              }}
             >
               Login
             </Button>

@@ -23,6 +23,7 @@ const MessageContainer = () => {
     {
       selectedUser !== null ? (
         <Box sx={{ 
+          flex: 1,
           minWidth: { md: 550 }, 
           display: 'flex', 
           flexDirection: 'column',
@@ -82,6 +83,7 @@ const MessageContainer = () => {
         </Box>
       ):  (
         <Box sx={{ 
+          flex: 1,
           minWidth: { md: 550 }, 
           display: 'flex', 
           flexDirection: 'column', 
