@@ -19,7 +19,8 @@ const SendInput = () => {
                     },
                     withCredentials:true
                 });
-                dispatch(setMessages([...messages, res?.data?.newMessage]))
+                // Optimistically add message; server will emit real-time event for receiver
+                dispatch(setMessages([...(messages || []), res?.data?.newMessage]))
                console.log(res);
           }catch(error){
                console.log(error);

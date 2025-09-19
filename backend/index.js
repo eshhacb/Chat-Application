@@ -20,7 +20,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Allow configuring frontend origin via env for deployment
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:8080';
+// Default to Vite dev server in development
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
 const corsOption = {
     origin: FRONTEND_ORIGIN,
     credentials: true

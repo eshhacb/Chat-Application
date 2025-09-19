@@ -11,7 +11,7 @@ const server = http.createServer(app);
 
 // Same-origin deployment: allow the current origin dynamically
 const io = new Server(server, {
-    path: '/socket',
+    // Use default Socket.IO path '/socket.io' for compatibility with proxies
     transports: ['websocket', 'polling'],
     cors: {
         origin: true,

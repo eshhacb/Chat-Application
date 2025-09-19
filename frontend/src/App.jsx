@@ -44,7 +44,7 @@ function App() {
     if(authUser){
       const backendUrl = import.meta.env.VITE_BACKEND_URL || '/';
       const socket=io(backendUrl,{
-        path:'/socket',
+        // Use default Socket.IO path '/socket.io' to match server and Vite proxy
         reconnection:true,
         transports: ['websocket','polling'],
         query:{ userId: authUser._id },
